@@ -1,7 +1,7 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: vm-on-aws
+  name: vm-on-aws-tf-backstage
   title: Create a new Virtual Machine on AWS
   description: |
     A template for creating a new Virtual Machine via terraform.
