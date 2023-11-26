@@ -1,12 +1,12 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: vm-classic
-  title: Create a new Virtual Machine
+  name: vm-on-aws
+  title: Create a new Virtual Machine on AWS
   description: |
-    A template for creating a new Virtual Machine via Pulumi.
+    A template for creating a new Virtual Machine via terraform.
   tags:
-  - pulumi
+  - terraform
   - vm
   - aws
 spec:
@@ -44,7 +44,7 @@ spec:
         ui:options:
           catalogFilter:
           - kind: Group
-  - title: Configure Pulumi template
+  - title: Configure terraform template
     required:
     - stack
     - organization
@@ -58,22 +58,20 @@ spec:
         title: Region
         type: string
         enum:
-        - eu-central-1
         - us-east-1
-        - us-east-2
-        - us-west-1
-        - us-west-2
-        default: eu-central-1
+        - eu-north-1
+
+        default: eu-north-1
         description: |
           The region to deploy the virtual machine to
       instanceType:
-        title: EKS Node Instance Type
+        title: EC2 Instance Type
         description: Instance type to use for worker nodes
         type: string
         enum:
+        - t2.micro
+        - t3.micro
         - t3.medium
-        - t3.large
-        - t3.xlarge
         default: t3.medium
       vpcNetworkCidr:
         title: VPC Network CIDR
@@ -84,15 +82,11 @@ spec:
         title: Programming Language
         type: string
         enum:
-        - go
-        - typescript
-        - yaml
-        - python
-        enumNames:
-        - Go
-        - TypeScript
+        - terraform
         - YAML
-        - Python
+        enumNames:
+        - terraform
+        - TypeScript
         description: Programming language to use
       stack:
         title: Select stack
@@ -118,9 +112,9 @@ spec:
           allowedHosts:
           - github.com
   steps:
-  - id: pulumi-new-component
-    name: Create new Pulumi component
-    action: pulumi:new
+  - id: terraform-new-template
+    name: Create new terraform template
+    action: terraform:new
     input:
       name: ${{parameters.name}}
       description: ${{parameters.description}}
@@ -139,9 +133,9 @@ spec:
     input:
       seconds: 10
       
-  - id: pulumi-deploy-infrastructure
-    name: Deploy the infrastructure using Pulumi CLI
-    action: pulumi:up
+  - id: terraform-deploy-infrastructure
+    name: Deploy the infrastructure using terraform CLI
+    action: terraform:up
     input:
       deployment: false
       name: ${{ parameters.name }}
@@ -201,6 +195,6 @@ spec:
       icon: catalog
       entityRef: ${{ steps['register'].output.entityRef }}
     - title: IP Address
-      url: ${{ steps['pulumi-deploy-infrastructure'].output.ip }}
+      url: ${{ steps['terraform-deploy-infrastructure'].output.ip }}
     - title: URL
-      url: ${{ steps['pulumi-deploy-infrastructure'].output.url }}
+      url: ${{ steps['terraform-deploy-infrastructure'].output.url }}
