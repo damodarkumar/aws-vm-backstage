@@ -21,7 +21,7 @@ spec:
       name:
         title: Name
         type: string
-        description: Unique name of the Pulumi project.
+        description: Unique name of the terraform-aws project.
         ui:
           field: EntityNamePicker
       description:
@@ -53,7 +53,7 @@ spec:
       organization:
         title: Organization
         type: string
-        description: The Pulumi organization to use for the Pulumi project
+        description: The terraform organization to use for the terraform project
       region:
         title: Region
         type: string
@@ -99,7 +99,7 @@ spec:
         - Development
         - Staging
         - Production
-        description: The pulumi stack to use
+        description: The terraform organization stack to use
   - title: Choose a GitHub repository location
     required:
     - repoUrl
